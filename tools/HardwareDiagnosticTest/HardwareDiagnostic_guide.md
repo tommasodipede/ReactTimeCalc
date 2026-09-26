@@ -1,29 +1,32 @@
-# 🎙️ Hardware Diagnostic Test: Sound Sensor & OLED
+# KY-037 Acoustic Sensor Calibration Tool 
 
-This project serves as a diagnostic tool to verify the wiring, power, and communication of a digital sound sensor (such as the KY-037 or LM393 modules) and an I2C OLED display (SSD1306).
+## Overview 📖
+This code is a standalone utility designed to test and calibrate the acoustic sensor (KY-037) used in the Reaction Time System. 
 
-It is highly recommended to run this code immediately after wiring your components to ensure everything is functioning correctly before moving on to more complex logic.
+Unlike the IMU sensor which relies on software thresholds, the KY-037 microphone module relies on a **hardware threshold**. It has an onboard potentiometer (a small screw) that dictates at what decibel level the digital pin goes `HIGH`. This tool provides instant visual feedback to help you tune that physical screw perfectly, ensuring it only triggers on loud sounds (like a starter gun or a loud clap) and ignores background noise.
 
-## 🛠️ What This Test Verifies
+## How It Works ⚙️
+1.  **Idle State:** The ESP32 monitors the digital pin (GPIO 4) connected to the microphone. The OLED displays **"Listening..."**.
+2.  **Trigger Detection:** The moment the sound exceeds the physical threshold set on the KY-037, the digital pin goes `HIGH`.
+3.  **Visual Feedback:** The OLED immediately flashes **"NOISE!"** and the serial monitor logs the event.
+4.  **Cooldown:** A brief 500ms cooldown is applied to prevent screen flickering before it returns to listening mode.
 
-1. **The Display (I2C):** Confirms that the SSD1306 OLED is receiving power, the SDA/SCL lines are wired correctly, and the screen can successfully render text.
+## Calibration Procedure 🛠️
 
-2. **The Sensor (Digital Read):** Confirms that the microphone module is powered and can successfully send a `HIGH` digital signal to the microcontroller (Pin 4) when a sound threshold is met.
+### 1. Setup 🔌
+* Flash this code to the ESP32.
+* Ensure the KY-037 microphone is connected to **Pin D4** as per the wiring diagram.
 
-## ⚠️ Crucial Step: Calibrating the KY-037 Sensor
+### 2. Initial Test 👏
+* Power on the system. The screen should read **"Listening..."**.
+* Clap your hands loudly near the microphone. If the screen flashes **"NOISE!"**, the sensor is working.
 
-Sound sensors like the **KY-037** do not work perfectly out of the box; **they require manual calibration**. The sensor determines what counts as a "loud noise" based on the position of its onboard potentiometer.
+### 3. Physical Tuning (The Potentiometer) 🪛
+Grab a small Phillips or flathead screwdriver. Locate the small brass/blue screw on the KY-037 module.
+*  **If it triggers too easily** (e.g., from talking or light wind): Turn the screw to *decrease* sensitivity.
+*  **If it doesn't trigger** (e.g., even when clapping loudly): Turn the screw to *increase* sensitivity.
 
-If your display always says "NOISE!" or never reacts to your claps, you need to adjust it:
-
-1. **Locate the Potentiometer:** Find the small blue box with a tiny brass or silver screw on top of the sensor module.
-
-2. **Run This Code:** Keep the microcontroller plugged in and running this diagnostic script.
-
-3. **Adjust the Screw:** Use a small flathead or Phillips screwdriver to turn the screw.
-
-   * *If the sensor is too sensitive (always triggering):* Turn the screw counter-clockwise.
-
-   * *If the sensor is not sensitive enough:* Turn the screw clockwise.
-
-4. **Test Live:** Clap your hands or snap your fingers near the microphone while turning the screw. Stop adjusting as soon as the OLED reliably switches from "Listening..." to "NOISE!" exactly when you clap.
+### 4. Final Verification ✅
+* Take the system to your track or testing environment.
+* Simulate a race start with your actual starting gun, clapper board, or whistle.
+* Adjust the screw until the system reliably catches **every single start command**, while ignoring ambient chatter and footsteps. Once set, the hardware is ready for the main race firmware!
