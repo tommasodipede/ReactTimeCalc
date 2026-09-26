@@ -13,7 +13,7 @@ An ESP32-based embedded system to measure track and field sprint reaction times 
 * `/docs` - Hardware components and wiring diagrams.
 
 ## 🛠️ Hardware Requirements & Setup
-Please see the [Hardware Documentation](docs/BOM.md) for the full list of components and the [Wiring Diagram](docs/wiring_diagram.md) for pinout connections.
+Please see the [Hardware Documentation](docs/HardwareComponents.md) for the full list of components and the [Wiring Diagram](docs/WiringDiagram.md) for pinout connections.
 
 ## 💻 Software Setup
 1. Install the ESP32 board in the Arduino IDE.
